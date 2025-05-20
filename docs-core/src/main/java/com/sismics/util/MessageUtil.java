@@ -5,15 +5,22 @@ import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
+/**
+ * Messages utilities.
+ *
+ * @author jtremeaux
+ */
 public class MessageUtil {
+    /**
+     * Returns a localized message in the specified language.
+     * Returns **key** if no message exists for this key.
+     * 
+     * @param locale Locale
+     * @param key Message key
+     * @param args Arguments to format
+     * @return Formatted message
+     */
     public static String getMessage(Locale locale, String key, Object... args) {
-        if (locale == null) {
-            throw new IllegalArgumentException("Locale cannot be null");
-        }
-        if (key == null) {
-            throw new IllegalArgumentException("Key cannot be null");
-        }
-
         ResourceBundle resources = ResourceBundle.getBundle("messages", locale);
         String message;
         try {
@@ -24,10 +31,13 @@ public class MessageUtil {
         return MessageFormat.format(message, args);
     }
 
+    /**
+     * Returns the resource bundle corresponding to the specified language.
+     * 
+     * @param locale Locale
+     * @return Resource bundle
+     */
     public static ResourceBundle getMessage(Locale locale) {
-        if (locale == null) {
-            throw new IllegalArgumentException("Locale cannot be null");
-        }
         return ResourceBundle.getBundle("messages", locale);
     }
 }

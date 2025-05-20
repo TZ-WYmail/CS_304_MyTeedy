@@ -1,37 +1,52 @@
-<div class="page-header">
-  <h1>{{ user.username }} <small>{{ user.email }}</small></h1>
+<div class="page-header" style="margin-bottom: 20px;">
+  <h1 style="font-size: 24px; color: #333;">
+    {{ user.username }} (ID: {{ user.userId }}) <small style="color: #666;">{{ user.email }}</small>
+  </h1>
 </div>
 
-<h4 ng-if="user.groups.length > 0">{{ 'user.profile.groups' | translate }}</h4>
-<ul ng-if="user.groups.length > 0">
-  <li ng-repeat="group in user.groups">
-    <a href="#/group/{{ group }}">{{ group }}</a>
+<!-- Groups Section -->
+<h4 ng-if="user.groups.length > 0" style="color: #555; margin-bottom: 10px;">
+  {{ 'user.profile.groups' | translate }}
+</h4>
+<ul ng-if="user.groups.length > 0" class="list-unstyled" style="margin-bottom: 20px;">
+  <li ng-repeat="group in user.groups" style="margin-bottom: 5px;">
+    <a href="#/group/{{ group }}" style="color: #007bff; text-decoration: none;">
+      {{ group }}
+    </a>
   </li>
 </ul>
 
-<h4>{{ 'user.profile.quota_used' | translate }}</h4>
+<!-- Quota Used Section -->
+<h4 style="color: #555; margin-bottom: 10px;">
+  {{ 'user.profile.quota_used' | translate }}
+</h4>
 <div class="row">
   <div class="col-md-6">
     <div class="progress" translate-attr="{ title: 'user.profile.percent_used' }" translate-values="{ percent: user.storage_current / user.storage_quota * 100 }">
-      <div class="progress-bar" ng-style="{ 'width': (user.storage_current / user.storage_quota * 100) + '%' }">
+      <div class="progress-bar" ng-style="{ 'width': (user.storage_current / user.storage_quota * 100) + '%' }" style="background-color: #007bff;">
         <span class="sr-only" translate="user.profile.percent_used" translate-values="{ percent: user.storage_current / user.storage_quota * 100 }"></span>
       </div>
     </div>
   </div>
 </div>
 
-<h4>{{ 'user.profile.related_links' | translate }}</h4>
-<ul>
-  <li>
+<!-- Related Links Section -->
+<h4 style="color: #555; margin-bottom: 10px;">
+  {{ 'user.profile.related_links' | translate }}
+</h4>
+<ul class="list-unstyled" style="margin-bottom: 20px;">
+  <li style="margin-bottom: 5px;">
     <a ng-href="#/document/search/by:{{ user.username }}"
        translate="user.profile.document_created"
-       translate-values="{ username: user.username }">
+       translate-values="{ username: user.username }"
+       style="color: #007bff; text-decoration: none;">
     </a>
   </li>
-  <li ng-if="userInfo.base_functions.indexOf('ADMIN') != -1">
+  <li ng-if="userInfo.base_functions.indexOf('ADMIN') != -1" style="margin-bottom: 5px;">
     <a ng-href="#/settings/user/edit/{{ user.username }}"
        translate="user.profile.edit_user"
-       translate-values="{ username: user.username }">
+       translate-values="{ username: user.username }"
+       style="color: #007bff; text-decoration: none;">
     </a>
   </li>
 </ul>

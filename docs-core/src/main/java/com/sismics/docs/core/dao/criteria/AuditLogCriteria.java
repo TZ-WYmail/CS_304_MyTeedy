@@ -1,4 +1,7 @@
 package com.sismics.docs.core.dao.criteria;
+import java.util.Date;
+import java.util.List;
+import com.sismics.docs.core.constant.AuditLogType;
 
 
 /**
@@ -46,4 +49,32 @@ public class AuditLogCriteria {
         isAdmin = admin;
         return this;
     }
+
+    private Date startDate;
+    private Date endDate;
+    private List<AuditLogType> types;
+    public Date getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
+    }
+
+    public Date getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(Date endDate) {
+        this.endDate = endDate;
+    }
+
+    public List<AuditLogType> getTypes() {
+        return types;
+    }
+
+    public void setTypes(List<AuditLogType> types) {
+        this.types = types;
+    }
+
 }

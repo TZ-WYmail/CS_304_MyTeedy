@@ -1,0 +1,32 @@
+<div class="login-form">
+  <h2 style="text-align: center; color: #333; margin-bottom: 20px;">User Registration</h2>
+  <form ng-submit="register()" name="registrationForm" novalidate>
+    <div style="margin-bottom: 15px;">
+      <label for="username" style="display: block; margin-bottom: 5px; font-weight: bold;">Username</label>
+      <input type="text" id="username" placeholder="Username" ng-model="form.name" required style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px;">
+    </div>
+    <div style="margin-bottom: 15px;">
+      <label for="email" style="display: block; margin-bottom: 5px; font-weight: bold;">Email</label>
+      <input type="email" id="email" placeholder="Email" ng-model="form.email" required style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px;">
+    </div>
+    <div style="margin-bottom: 15px;">
+      <label for="password" style="display: block; margin-bottom: 5px; font-weight: bold;">Password</label>
+      <input type="password" id="password" placeholder="Password" ng-model="form.password" required style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px;">
+    </div>
+    <div style="margin-bottom: 15px;">
+      <label for="confirm_password" style="display: block; margin-bottom: 5px; font-weight: bold;">Confirm Password</label>
+      <input type="password" id="confirm_password" placeholder="Confirm Password" ng-model="confirm_password" required style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px;">
+      <div ng-show="form.password !== confirm_password && confirm_password" style="color: red; font-size: 12px;">
+        Passwords do not match.
+      </div>
+    </div>
+    <div style="margin-bottom: 15px;">
+      <label for="message" style="display: block; margin-bottom: 5px; font-weight: bold;">Notes</label>
+      <textarea id="message" placeholder="Notes" ng-model="form.message" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; resize: vertical;"></textarea>
+    </div>
+    <button type="submit" style="width: 100%; padding: 10px; background-color: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer;" ng-disabled="form.password !== confirm_password || registrationForm.$invalid">
+      Submit Registration
+    </button>
+  </form>
+  <div ng-if="status" style="text-align: center; margin-top: 15px; color: #ff4d4d; font-size: 14px;">{{ status }}</div>
+</div>

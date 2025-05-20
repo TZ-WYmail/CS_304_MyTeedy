@@ -30,3 +30,62 @@
     <div ui-view="user"></div>
   </div>
 </div>
+
+<div>
+  <h3 style="margin-bottom: 20px;">Pending Registration Requests</h3>
+  <table class="table table-bordered" style="width: 100%; margin-bottom: 20px;">
+    <thead>
+    <tr>
+      <th style="text-align: center; padding: 8px; background-color: #f2f2f2;">Username</th>
+      <th style="text-align: center; padding: 8px; background-color: #f2f2f2;">Email</th>
+      <th style="text-align: center; padding: 8px; background-color: #f2f2f2;">Notes</th>
+      <th style="text-align: center; padding: 8px; background-color: #f2f2f2;">Submission Time</th>
+      <th style="text-align: center; padding: 8px; background-color: #f2f2f2;">Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr ng-repeat="req in registrationRequests">
+      <td style="text-align: center; padding: 8px;">{{ req.name }}</td>
+      <td style="text-align: center; padding: 8px;">{{ req.email }}</td>
+      <td style="text-align: center; padding: 8px;">{{ req.message }}</td>
+      <td style="text-align: center; padding: 8px;">{{ req.createdAt }}</td>
+      <td style="text-align: center; padding: 8px;">
+        <button class="btn btn-success btn-sm" ng-click="Approve(req.id)" style="margin-right: 5px;">Accept</button>
+        <button class="btn btn-danger btn-sm" ng-click="Reject(req.id)">Reject</button>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+  <p ng-if="registrationRequests.length === 0" class="text-muted" style="text-align: center; color: #999; font-size: 14px;">No pending registration requests.</p>
+</div>
+
+
+<div>
+  <h3 style="margin-bottom: 20px; color: #333;">User Activity Gantt Chart</h3>
+
+  <div ng-if="ganttLoading" style="margin-bottom: 15px; color: #5cb85c;">
+    Loading user activity data...
+  </div>
+  <div ng-if="ganttError" class="text-danger" style="margin-bottom: 15px;">
+    {{ ganttError }}
+  </div>
+
+  <div class="form-inline" style="margin-bottom: 20px;">
+    <label  style="margin-right: 10px; font-weight: bold;">User name:</label>
+    <input type="text" ng-model="ganttUserId" placeholder="User name" class="form-control" style="margin-right: 10px;" />
+
+    <label style="margin-right: 10px; font-weight: bold;">Start Date:</label>
+    <input type="date" ng-model="ganttStart" class="form-control" style="margin-right: 10px;" />
+
+    <label  style="margin-right: 10px; font-weight: bold;">End Date:</label>
+    <input type="date" ng-model="ganttEnd" class="form-control" style="margin-right: 10px;" />
+
+    <button class="btn btn-primary" ng-click="loadGantt()" style="margin-left: 10px;">
+      Load
+    </button>
+  </div>
+
+  <div id="gantt">
+    <!-- Gantt chart will be rendered here -->
+  </div>
+</div>

@@ -28,7 +28,7 @@ public class User implements Loggable {
      */
     @Column(name = "USE_IDROLE_C", nullable = false, length = 36)
     private String roleId;
-
+    
     /**
      * User's username.
      */
@@ -112,7 +112,6 @@ public class User implements Loggable {
         this.roleId = roleId;
         return this;
     }
-
 
     public String getUsername() {
         return username;

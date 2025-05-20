@@ -15,6 +15,7 @@ import com.sismics.util.context.ThreadLocalContext;
 import jakarta.persistence.EntityManager;
 import java.sql.Timestamp;
 import java.util.*;
+import com.sismics.docs.core.dao.dto.UserActivityGanttDto;
 
 /**
  * Audit log DAO.
@@ -66,19 +67,55 @@ public class AuditLogDao {
         }
         
         if (criteria.getUserId() != null) {
-            if (criteria.isAdmin()) {
-                // For admin users, display all logs except ACL logs
-                queries.add(baseQuery + " where l.LOG_CLASSENTITY_C != 'Acl' ");
-            } else {
-                // Get all logs originating from the user, not necessarly on owned items
-                // Filter out ACL logs
-                queries.add(baseQuery + " where l.LOG_IDUSER_C = :userId and l.LOG_CLASSENTITY_C != 'Acl' ");
-                parameterMap.put("userId", criteria.getUserId());
+            // if (criteria.isAdmin()) {
+            //     // For admin users, display all logs except ACL logs
+            //     queries.add(baseQuery + " where l.LOG_CLASSENTITY_C != 'Acl' ");
+            // } else {
+            //     // Get all logs originating from the user, not necessarly on owned items
+            //     // Filter out ACL logs
+            //     queries.add(baseQuery + " where l.LOG_IDUSER_C = :userId and l.LOG_CLASSENTITY_C != 'Acl' ");
+            //     parameterMap.put("userId", criteria.getUserId());
+            // }
+            criteria.setAdmin(true);
+            queries.add(baseQuery + " where l.LOG_IDUSER_C = (select u.USE_ID_C from T_USER u where u.USE_USERNAME_C = :username) and l.LOG_CLASSENTITY_C != 'Acl'");
+            parameterMap.put("username", criteria.getUserId());
+        }
+
+        if (criteria.getUserId() == null && criteria.getDocumentId() == null) {
+            // For non-admin users, display only logs on owned items
+            // Filter out ACL logs
+            queries.add(baseQuery + " where l.LOG_CLASSENTITY_C != 'Acl' ");
+        }
+
+        // 增加时间范围过滤
+        if (criteria.getStartDate() != null) {
+            for (int i = 0; i < queries.size(); i++) {
+                queries.set(i, queries.get(i) + " and l.LOG_CREATEDATE_D >= :startDate ");
             }
+            parameterMap.put("startDate", criteria.getStartDate());
+        }
+        if (criteria.getEndDate() != null) {
+            for (int i = 0; i < queries.size(); i++) {
+                queries.set(i, queries.get(i) + " and l.LOG_CREATEDATE_D <= :endDate ");
+            }
+            parameterMap.put("endDate", criteria.getEndDate());
+        }
+
+        // 增加类型过滤
+        if (criteria.getTypes() != null && !criteria.getTypes().isEmpty()) {
+            for (int i = 0; i < queries.size(); i++) {
+                queries.set(i, queries.get(i) + " and l.LOG_TYPE_C in :types ");
+            }
+            List<String> typesStringList = new ArrayList<>();
+            for (AuditLogType t : criteria.getTypes()) {
+                typesStringList.add(t.name());
+            }
+            parameterMap.put("types", typesStringList);
         }
         
         // Perform the search
-        QueryParam queryParam = new QueryParam(Joiner.on(" union ").join(queries), parameterMap);
+        String unionQuery = Joiner.on(" union ").join(queries);
+        QueryParam queryParam = new QueryParam(unionQuery, parameterMap);
         List<Object[]> l = PaginatedLists.executePaginatedQuery(paginatedList, queryParam, sortCriteria);
         
         // Assemble results
@@ -97,5 +134,25 @@ public class AuditLogDao {
         }
 
         paginatedList.setResultList(auditLogDtoList);
+    }
+
+    public List<UserActivityGanttDto> findUserActivitiesForGantt(AuditLogCriteria criteria) {
+        PaginatedList<AuditLogDto> paginatedList = PaginatedLists.create(1000, 0);
+        SortCriteria sortCriteria = new SortCriteria(1, false);
+
+        findByCriteria(paginatedList, criteria, sortCriteria);
+
+        List<UserActivityGanttDto> ganttList = new ArrayList<>();
+        for (AuditLogDto dto : paginatedList.getResultList()) {
+            UserActivityGanttDto ganttDto = new UserActivityGanttDto();
+            ganttDto.setTaskId(dto.getEntityId());
+            ganttDto.setTaskName(dto.getMessage() != null ? dto.getMessage() : dto.getEntityClass());
+            ganttDto.setUserId(dto.getUsername());
+            ganttDto.setUsername(dto.getUsername());
+            ganttDto.setType(dto.getType());
+            ganttDto.setTimestamp(dto.getCreateTimestamp());
+            ganttList.add(ganttDto);
+        }
+        return ganttList;
     }
 }

@@ -28,6 +28,16 @@ angular.module('docs',
         }
       }
     })
+    .state('register', {
+        url: '/register',
+        views: {
+          'page': {
+            templateUrl: 'partial/docs/register.html',
+            controller: 'register'
+          }
+        }
+    })
+
     .state('passwordreset', {
       url: '/passwordreset/:key',
       views: {
@@ -355,7 +365,6 @@ angular.module('docs',
         }
       }
     })
-
     .state('login', {
       url: '/login?redirectState&redirectParams',
       views: {
@@ -365,19 +374,6 @@ angular.module('docs',
         }
       }
     })
-
-      //注册
-    .state('my_register', {
-      url: '/register',
-      views: {
-        'page': {
-          templateUrl: 'partial/docs/registration.html',
-          controller: 'My_register'
-        }
-      }
-    })
-
-
     .state('user', {
       url: '/user',
       abstract: true,
@@ -388,7 +384,6 @@ angular.module('docs',
         }
       }
     })
-
     .state('user.default', {
       url: '',
       views: {

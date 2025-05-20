@@ -197,6 +197,14 @@
       <artifactId>h2</artifactId>
       <scope>test</scope>
     </dependency>
+
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter</artifactId>
+      <version>5.7.1</version>
+      <scope>test</scope>
+    </dependency>
+
   </dependencies>
 
   <profiles>
@@ -235,12 +243,5 @@
       </resource>
     </resources>
   </build>
-
-  <distributionManagement>
-    <site>
-      <id>local</id>
-      <url>file:${project.build.directory}/site</url>
-    </site>
-  </distributionManagement>
 
 </project>

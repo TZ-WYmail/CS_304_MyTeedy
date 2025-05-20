@@ -1,4 +1,4 @@
-update T_CONFIG set CFG_VALUE_C = 'RAM' where CFG_ID_C = 'LUCENE_DIRECTORY_STORAGE';
+-- DBUPDATE-032-0.SQL
 
 CREATE TABLE registration_request (
     id UUID PRIMARY KEY,

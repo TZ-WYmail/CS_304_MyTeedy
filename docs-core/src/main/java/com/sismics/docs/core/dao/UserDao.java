@@ -49,16 +49,11 @@ public class UserDao {
         q.setParameter("username", username);
         try {
             User user = (User) q.getSingleResult();
-            if(!user.getUsername().equals("admin")){
-                BCrypt.Result result = BCrypt.verifyer().verify(password.toCharArray(), user.getPassword());
-                if (!result.verified || user.getDisableDate() != null) {
-                    return null;
-                }
-                return user;
+            BCrypt.Result result = BCrypt.verifyer().verify(password.toCharArray(), user.getPassword());
+            if (!result.verified || user.getDisableDate() != null) {
+                return null;
             }
-           else{
-               return user;
-            }
+            return user;
         } catch (NoResultException e) {
             return null;
         }
@@ -73,9 +68,9 @@ public class UserDao {
      * @throws Exception e
      */
     public String create(User user, String userId) throws Exception {
-
         // Create the user UUID
         user.setId(UUID.randomUUID().toString());
+        
         // Checks for user unicity
         EntityManager em = ThreadLocalContext.get().getEntityManager();
         Query q = em.createQuery("select u from User u where u.username = :username and u.deleteDate is null");
@@ -97,9 +92,6 @@ public class UserDao {
         
         return user.getId();
     }
-
-
-
     
     /**
      * Updates a user.
