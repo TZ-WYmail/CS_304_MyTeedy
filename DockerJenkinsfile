@@ -19,6 +19,14 @@ pipeline {
                 sh 'mvn -B -DskipTests clean package'
             }
         }
+        stage('Print Current User') {
+            steps {
+                script {
+                    // 打印当前用户
+                    sh 'whoami'
+                }
+            }
+        }
         // Building Docker images
        stage('Building image') {
             steps {
