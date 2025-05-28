@@ -20,11 +20,10 @@ pipeline {
             }
         }
         // Building Docker images
-        stage('Building image') {
+       stage('Building image') {
             steps {
                 script {
-                    // Assume Dockerfile is located at root
-                    docker.build("${env.DOCKER_IMAGE}:${env.DOCKER_TAG}")
+                    sh "docker build -t ${env.DOCKER_IMAGE}:${env.DOCKER_TAG} ."
                 }
             }
         }
